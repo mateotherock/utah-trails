@@ -1,0 +1,16 @@
+.main_header {
+    background-color: lightgray;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 100px;
+    align-items: center;
+}
+
+.main_header_left {
+
+}
+
+.main_header_right {
+
+}
