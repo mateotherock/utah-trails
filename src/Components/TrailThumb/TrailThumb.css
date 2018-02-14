@@ -1,0 +1,11 @@
+.thumb_container {
+    background-repeat: no-repeat;
+    width: 40vw;
+    height: 30vh;
+}
+
+.thumb_name,
+.thumb_difficulty,
+.thumb_area {
+    color: white;
+}

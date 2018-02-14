@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Marker, InfoWindow } from 'google-maps-react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default class Map extends Component {
@@ -8,10 +9,8 @@ export default class Map extends Component {
         super(props);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.google !== this.props.google) {
+    componentDidUpdate() {
             this.loadMap()
-        }
     }
 
     loadMap() {
@@ -43,7 +42,7 @@ export default class Map extends Component {
                         map: this.map,
                     })
                     var infowindow = new google.maps.InfoWindow({
-                        content: `<img src="${marker.trail_img}" heigh="70%" width="70%" alt=""/>
+                        content: `<a href="http://localhost:3000/#/trail/${marker.trail_id}"><img src="${marker.trail_img}" heigh="70%" width="70%" alt=""/></a>
                         <h3>${marker.trail_name}</h3>`
                     })
                     markers.addListener('click', function() {

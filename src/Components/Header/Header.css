@@ -2,15 +2,27 @@
     background-color: lightgray;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     height: 100px;
     align-items: center;
 }
 
 .main_header_left {
-
+    padding-left: 30px;
 }
 
 .main_header_right {
+    padding-right: 30px;
+    display: flex;
+    flex-direction: row;
+}
 
+.main_header_button {
+    height: 50px;
+    width: 150px;
+    border: none;
+    cursor: pointer;
+    background-color: lightgray;
+    color: #60b0f4;
+    font-size: 18px;
 }

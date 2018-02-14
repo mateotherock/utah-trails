@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './../UtahTrails.png';
 import './Header.css';
+import { Link } from 'react-router-dom';
 
 export default class Header extends Component {
     render() {
@@ -10,12 +11,8 @@ export default class Header extends Component {
                     <img src={logo} />
                 </div>
                 <div className="main_header_right">
-                    <span>
-                        <button>Search Trails</button>
-                    </span>
-                    <span>
-                        <button>Login/Signup</button>
-                    </span>
+                    <Link to='/search'><button className="main_header_button">Search Trails</button></Link>
+                    <button className="main_header_button">Login/Signup</button>
                 </div>
             </header>
         )

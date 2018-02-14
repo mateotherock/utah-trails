@@ -6,8 +6,9 @@ export class MapContainer extends Component {
     constructor(props) {
         super(props);
     }
-    render() {
 
+    render() {
+    
         return (
             <Map google={this.props.google}>
             </Map>

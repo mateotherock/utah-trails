@@ -14,7 +14,7 @@ class App extends Component {
           <Switch>
             <Route exact path = '/' component = { Home } />
             <Route path = '/profile' component = { Profile } />
-            <Route path = '/trail' component = { Trail } />
+            <Route path = '/trail/:id' component = { Trail } />
             <Route path = '/search' component = { Search } />
           </Switch>
         </HashRouter>
