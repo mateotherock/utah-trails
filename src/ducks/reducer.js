@@ -9,15 +9,19 @@ let initialState = {
     trailLength: 0,
     elevationGain: 0,
     trailImage: '',
-    trailsToRender: []
+    trailheadLat: 0,
+    trailheadLng: 0,
+    trailsToRender: [],
+    trailTags: []
 }
 
 const GET_TRAIL = 'GET_TRAIL';
 const GET_TRAILS = 'GET_TRAILS';
 const FILTER_TRAILS = 'FILTER_TRAILS';
+const GET_TRAIL_TAGS = 'GET_TRAIL_TAGS';
 
-export function getTrail(id) {
-    const trail = axios.get(`/api/trail/${id}`).then(resp => {
+export function getTrail(name) {
+    const trail = axios.get(`/api/trail/${name}`).then(resp => {
         return resp.data;
     });
     return {
@@ -37,13 +41,22 @@ export function getTrails() {
 }
 
 export function filterTrails(obj) {
-    console.log(obj)
     const trails = axios.post('/api/trails', obj).then(resp => {
         return resp.data;
     })
     return {
         type: FILTER_TRAILS,
         payload: trails
+    }
+}
+
+export function getTrailTags(name) {
+    const tags = axios.get(`/api/tags/${name}`).then(resp => {
+        return resp.data;
+    });
+    return {
+        type: GET_TRAIL_TAGS,
+        payload: tags
     }
 }
 
@@ -57,12 +70,16 @@ export default function reducer(state = initialState, action) {
                                                 generalArea: action.payload.general_area,
                                                 trailLength: action.payload.trail_length,
                                                 elevationGain: action.payload.elevation_gain,
+                                                trailheadLat: action.payload.trailhead_lat,
+                                                trailheadLng: action.payload.trailhead_lng,
                                                 trailImage: action.payload.trail_img
              })
         case GET_TRAILS + '_FULFILLED':
              return Object.assign({}, state, { trailsToRender: action.payload })
         case FILTER_TRAILS + '_FULFILLED':
              return Object.assign({}, state, { trailsToRender: action.payload })
+        case GET_TRAIL_TAGS + '_FULFILLED':
+             return Object.assign({}, state, { trailTags:action.payload })
         default:
             return state;
     }

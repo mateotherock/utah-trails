@@ -8,7 +8,7 @@ export default class Header extends Component {
         return (
             <header className="main_header">
                 <div className="main_header_left">
-                    <img src={logo} />
+                    <Link to='/'><img src={logo} alt="Utah Trails Logo"/></Link>
                 </div>
                 <div className="main_header_right">
                     <Link to='/search'><button className="main_header_button">Search Trails</button></Link>

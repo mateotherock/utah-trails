@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import { getTrails, filterTrails } from './../../ducks/reducer.js';
 import Header from './../Header/Header.js';
@@ -45,6 +44,7 @@ class Search extends Component {
                 <div>
                     <form onSubmit={this.filterTrails}>
                         Difficulty: <select name="difficulty" value={this.state.difficulty} onChange={(e) => this.setState({ difficulty: e.target.value })}>
+                            <option value="Select" hidden default>Select</option>
                             <option value="Easy">Easy</option>
                             <option value="Moderate">Moderate</option>
                             <option value="Hard">Hard</option>
@@ -58,10 +58,12 @@ class Search extends Component {
                             <option value="5 stars">5 Stars</option>
                         </select> */}
                         Area: <select name="area" value={this.state.area} onChange={(e) => this.setState({ area: e.target.value })}>
+                            <option value="Select" hidden default>Select</option>
                             <option value="Utah County">Utah County</option>
                             <option value="Grand County">Grand County</option>
                         </select>
                         Max Length in Miles: <select name="length" value={this.state.length} onChange={(e) => this.setState({ length: e.target.value })}>
+                            <option value="Select" hidden default>Select</option>  
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -69,6 +71,7 @@ class Search extends Component {
                             <option value="5">5</option>
                         </select>
                         Max Elevation Gain in Feet: <select name="eGain" value={this.state.eGain} onChange={(e) => this.setState({ eGain: e.target.value })}>
+                            <option value="Select" hidden default>Select</option>
                             <option value="100">100</option>
                             <option value="500">500</option>
                             <option value="1000">1000</option>

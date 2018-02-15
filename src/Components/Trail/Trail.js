@@ -1,28 +1,41 @@
 import React, { Component } from 'react';
 import Header from './../Header/Header.js';
 import { connect } from 'react-redux';
-import { getTrail } from './../../ducks/reducer.js';
+import { getTrail, getTrailTags } from './../../ducks/reducer.js';
+import './Trail.css';
 
 class Trail extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
-        this.props.getTrail(this.props.match.params.id)
+        this.props.getTrail(this.props.match.params.name)
+        this.props.getTrailTags(this.props.match.params.name)
     }
-
     render() {
 
-        console.log(this.props)
+        const tags = this.props.trailTags.map((tag, index) => 
+            <span key={index} className="tag">{tag}</span>
+        )
+
         return (
             <div>
                 <Header />
-                <h1>{this.props.trailName}</h1>
-                <h1>{this.props.trailDifficulty}</h1>
-                <h1>{this.props.generalArea}</h1>
-                <h1>{this.props.trailLength} miles</h1>
-                <h1>{this.props.elevationGain} feet</h1>
+                <div className="trail_container">
+                    <h1>{this.props.trailName}</h1>
+                    <div className="trail_deets">
+                        <p>Difficulty: {this.props.trailDifficulty}</p>
+                        <p>Area: {this.props.generalArea}</p>
+                        <p>Length: {this.props.trailLength} miles</p>
+                        <p>Elevation Gain: {this.props.elevationGain} feet</p>
+                    </div>
+                    <div className="tag_group">{tags}</div>
+                    <img className="trail_image" src={this.props.trailImage} alt="Trail" />
+                    <p className="trail_description">Description: {this.props.trailDescription}</p>
+                    <a href={`https://www.google.com/maps/dir/Current+Location/${this.props.trailheadLat},${this.props.trailheadLng}`} target="_blank" alt="Google Maps Link">Get directions to Trailhead</a>
+                </div>
+                <h2>Write a Review</h2>
+                <form className="trail_review">
+                    <h3>Review</h3>
+                    <input type="text"></input>
+                </form>
             </div>
         )
     }
@@ -32,4 +45,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { getTrail })(Trail);
+export default connect(mapStateToProps, { getTrail, getTrailTags })(Trail);

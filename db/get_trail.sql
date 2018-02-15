@@ -1,3 +1,3 @@
 select *
 from trail
-where trail_id = $1;
+where trail_name = $1;
