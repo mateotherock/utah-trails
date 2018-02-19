@@ -1,19 +1,94 @@
 require('dotenv').config();
 const express = require('express')
+        , session = require('express-session')
+        , passport = require('passport')
+        , Auth0Strategy = require('passport-auth0')
         , massive = require('massive')
         , bodyParser = require('body-parser');
 
 const {
     CONNECTION_STRING,
-    SERVER_PORT
+    SERVER_PORT,
+    SESSION_SECRET,
+    DOMAIN,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    CALLBACK_URL
 } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
 
+app.use(session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
 massive(CONNECTION_STRING).then(db => {
     app.set('db', db);
 });
+
+passport.use(new Auth0Strategy({
+    domain: DOMAIN,
+    clientID: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    callbackURL: CALLBACK_URL,
+    scope: 'openid profile'
+}, function(accessToken, refreshToken, extraParams, profile, done) {
+    
+    const db = app.get('db');
+
+    const img = "https://robohash.org/me";
+
+    const date = new Date();
+
+    const { sub, name } = profile._json;
+
+    db.find_user([sub]).then(response => {
+        if (response[0]) {
+            done(null, response[0].user_id)
+        } else {
+            db.create_user([sub, name, img, date]).then(response => {
+                done(null, response[0].user_id)
+            })
+        }
+    });
+}));
+
+passport.serializeUser((id, done) => {
+    done(null, id);
+})
+
+passport.deserializeUser((id, done) => {
+    const db = app.get('db');
+    db.find_logged_in_user([id]).then(response => {
+        done(null, response[0]);
+    })
+})
+
+app.get('/auth', passport.authenticate('auth0'));
+
+app.get('/auth/callback', passport.authenticate('auth0', {
+    successRedirect: 'http://localhost:3000/#/'
+}));
+
+app.get('/auth/me', (req, res) => {
+    if (!req.user) {
+        res.status(404).send('Not logged in');
+    } else {
+        res.status(200).send(req.user);
+    }
+});
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('http://localhost:3000/#/');
+})
 
 app.get('/api/markers', (req, res) => {
     const dbInstance = req.app.get('db');
@@ -50,7 +125,6 @@ app.get('/api/trails', (req, res) => {
 })
 
 app.post('/api/trails', (req, res) => {
-    console.log(req.body)
     let { difficulty, area, length, eGain } = req.body;
     length = Number(length);
     eGain = Number(eGain);
@@ -62,6 +136,14 @@ app.post('/api/trails', (req, res) => {
     const dbInstance = req.app.get('db');
     dbInstance.filter_trails([difficulty, area, length, eGain])
     .then(trails => {res.status(200).send(trails);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/addName/', (req, res) => {
+    let { id, firstName, lastName } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.add_name([id, firstName, lastName])
+    .then(user => {res.status(200).send(user)})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 

@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 let initialState = {
+    user: {
+        user_id: null
+    },
     trailName: '',
     trailDifficulty: '',
     averageRating: '',
@@ -19,6 +22,29 @@ const GET_TRAIL = 'GET_TRAIL';
 const GET_TRAILS = 'GET_TRAILS';
 const FILTER_TRAILS = 'FILTER_TRAILS';
 const GET_TRAIL_TAGS = 'GET_TRAIL_TAGS';
+const GET_USER = 'GET_USER';
+const ADD_NAME = 'ADD_NAME';
+
+export function getUser() {
+    const user = axios.get('/auth/me').then(res => {
+        return res.data;
+    })
+
+    return {
+        type: GET_USER,
+        payload: user
+    }
+}
+
+export function addName(obj) {
+    const user = axios.post('/api/addName', obj).then(resp => {
+        return resp.data[0]
+    })
+    return {
+        type: ADD_NAME,
+        payload: user
+    }
+}
 
 export function getTrail(name) {
     const trail = axios.get(`/api/trail/${name}`).then(resp => {
@@ -62,6 +88,10 @@ export function getTrailTags(name) {
 
 export default function reducer(state = initialState, action) {
     switch (action.type) {
+        case GET_USER + '_FULFILLED':
+            return Object.assign({}, state, { user: action.payload })
+        case ADD_NAME + '_FULFILLED':
+            return Object.assign({}, state, { user: action.payload })
         case GET_TRAIL + '_FULFILLED':
             return Object.assign({}, state, { trailName: action.payload.trail_name,
                                                 trailDifficulty: action.payload.difficulty,

@@ -31,11 +31,15 @@ class Trail extends Component {
                     <p className="trail_description">Description: {this.props.trailDescription}</p>
                     <a href={`https://www.google.com/maps/dir/Current+Location/${this.props.trailheadLat},${this.props.trailheadLng}`} target="_blank" alt="Google Maps Link">Get directions to Trailhead</a>
                 </div>
-                <h2>Write a Review</h2>
-                <form className="trail_review">
-                    <h3>Review</h3>
-                    <input type="text"></input>
-                </form>
+                <div className="review_container">
+                    <form className="trail_review">
+                        <h2>Write a Review</h2>
+                        <h3>What did you think of the hike?</h3>
+                        <input className="review_input" id="review"></input>
+                        <button type="submit">Submit</button>
+                        <button type="reset">Cancel</button>
+                    </form>
+                </div>
             </div>
         )
     }

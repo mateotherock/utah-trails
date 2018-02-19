@@ -3,7 +3,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100vw;
     height: 100px;
     align-items: center;
 }
@@ -19,8 +18,6 @@
 }
 
 .main_header_button {
-    height: 50px;
-    width: 150px;
     border: none;
     cursor: pointer;
     background-color: lightgray;

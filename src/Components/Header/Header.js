@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import logo from './../UtahTrails.png';
 import './Header.css';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getUser } from './../../ducks/reducer.js';
 
-export default class Header extends Component {
+class Header extends Component {
+
+    componentDidMount() {
+        this.props.getUser()
+    }
+
     render() {
         return (
             <header className="main_header">
@@ -12,9 +19,23 @@ export default class Header extends Component {
                 </div>
                 <div className="main_header_right">
                     <Link to='/search'><button className="main_header_button">Search Trails</button></Link>
-                    <button className="main_header_button">Login/Signup</button>
+                    {(this.props.user.user_id) ? 
+                    <div>
+                        <Link to='/profile'><button className="main_header_button">Profile</button></Link>
+                        <a href='http://localhost:3001/logout'><button className="main_header_button">Logout</button></a>
+                    </div>
+                    :
+                    <a href={ process.env.REACT_APP_LOGIN } ><button className="main_header_button">Login/Signup</button></a>}
                 </div>
             </header>
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps, { getUser })(Header);
