@@ -31,7 +31,8 @@ app.use(passport.session());
 
 massive(CONNECTION_STRING).then(db => {
     app.set('db', db);
-});
+}).catch(_=> console.log('No'));
+;
 
 passport.use(new Auth0Strategy({
     domain: DOMAIN,
@@ -144,6 +145,38 @@ app.post('/api/addName/', (req, res) => {
     const dbInstance = req.app.get('db');
     dbInstance.add_name([id, firstName, lastName])
     .then(user => {res.status(200).send(user)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/heartedTrails/:id', (req, res) => {
+    let { id } = req.params;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_hearted_trails([id])
+    .then(trailIds => {res.status(200).send(trailIds)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/heartTrail', (req, res) => {
+    let { user_id, trail_id } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.heart_trail([user_id, trail_id])
+    .then(trailIds => {res.status(200).send(trailIds)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/unheartTrail', (req, res) => {
+    let { user_id, trail_id } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.unheart_trail([user_id, trail_id])
+    .then(trailIds => {res.status(200).send(trailIds)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/starredTrails/:id', (req, res) => {
+    let { id } = req.params;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_starred_trails([id])
+    .then(ratings => {res.status(200).send(ratings)})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 

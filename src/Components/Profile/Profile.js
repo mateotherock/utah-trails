@@ -22,6 +22,11 @@ class Profile extends Component {
     }
 
     render() {
+
+        if(this.props.user.date_joined) {
+            var dateJoined = this.props.user.date_joined.split('T')[0];
+        }
+
         return (
             <div>
                 <Header />
@@ -35,6 +40,10 @@ class Profile extends Component {
                     <button type='submit' onClick={() => {this.props.addName({firstName: this.state.firstName, lastName: this.state.lastName, id: this.props.user.user_id})}}>Add Name</button>
                 </div>
                 }
+                <div>
+                    <img src={this.props.user.profile_picture} />
+                    Joined: {dateJoined}
+                </div>
                 <div>This is the profile component</div>
             </div>
         )

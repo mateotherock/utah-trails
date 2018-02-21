@@ -6,7 +6,6 @@ let initialState = {
     },
     trailName: '',
     trailDifficulty: '',
-    averageRating: '',
     trailDescription: '',
     generalArea: '',
     trailLength: 0,
@@ -15,7 +14,9 @@ let initialState = {
     trailheadLat: 0,
     trailheadLng: 0,
     trailsToRender: [],
-    trailTags: []
+    trailTags: [],
+    heartedTrails: [],
+    starredTrails: []
 }
 
 const GET_TRAIL = 'GET_TRAIL';
@@ -24,6 +25,10 @@ const FILTER_TRAILS = 'FILTER_TRAILS';
 const GET_TRAIL_TAGS = 'GET_TRAIL_TAGS';
 const GET_USER = 'GET_USER';
 const ADD_NAME = 'ADD_NAME';
+const GET_HEARTED_TRAILS = 'GET_HEARTED_TRAILS';
+const HEART_TRAIL = 'HEART_TRAIL';
+const UNHEART_TRAIL = 'UNHEART_TRAIL';
+const GET_STARRED_TRAILS = 'GET_STARRED_TRAILS';
 
 export function getUser() {
     const user = axios.get('/auth/me').then(res => {
@@ -86,6 +91,49 @@ export function getTrailTags(name) {
     }
 }
 
+export function getHeartedTrails(id) {
+    const heartedTrails = axios.get(`/api/heartedTrails/${id}`).then(resp => {
+        let trailNames = resp.data.map(object => object.trail_name)
+        return trailNames;
+    })
+    return {
+        type: GET_HEARTED_TRAILS,
+        payload: heartedTrails
+    }
+}
+
+export function heartTrail(obj) {
+    const heartedTrails = axios.post('/api/heartTrail', obj).then(resp => {
+        let trailNames = resp.data.map(object => object.trail_name)
+        return trailNames;
+    })
+    return {
+        type: HEART_TRAIL,
+        payload: heartedTrails
+    }
+}
+
+export function unheartTrail(obj) {
+    const heartedTrails = axios.post('/api/unheartTrail', obj).then(resp => {
+        let trailNames = resp.data.map(object => object.trail_name)
+        return trailNames;
+    })
+    return {
+        type: UNHEART_TRAIL,
+        payload: heartedTrails
+    }
+}
+
+export function getStarredTrails(id) {
+    const starredTrails = axios.get(`/api/starredTrails/${id}`).then(resp => {
+        return resp.data;
+    })
+    return {
+        type: GET_STARRED_TRAILS,
+        payload: starredTrails
+    }
+}
+
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_USER + '_FULFILLED':
@@ -93,9 +141,8 @@ export default function reducer(state = initialState, action) {
         case ADD_NAME + '_FULFILLED':
             return Object.assign({}, state, { user: action.payload })
         case GET_TRAIL + '_FULFILLED':
-            return Object.assign({}, state, { trailName: action.payload.trail_name,
+            return Object.assign({}, state, {   trailName: action.payload.trail_name,
                                                 trailDifficulty: action.payload.difficulty,
-                                                averageRating: action.payload.average_rating,
                                                 trailDescription: action.payload.trail_description,
                                                 generalArea: action.payload.general_area,
                                                 trailLength: action.payload.trail_length,
@@ -109,7 +156,15 @@ export default function reducer(state = initialState, action) {
         case FILTER_TRAILS + '_FULFILLED':
              return Object.assign({}, state, { trailsToRender: action.payload })
         case GET_TRAIL_TAGS + '_FULFILLED':
-             return Object.assign({}, state, { trailTags:action.payload })
+             return Object.assign({}, state, { trailTags: action.payload })
+        case GET_HEARTED_TRAILS + '_FULFILLED':
+             return Object.assign({}, state, { heartedTrails: action.payload })
+        case HEART_TRAIL + '_FULFILLED':
+             return Object.assign({}, state, { heartedTrails: action.payload })
+        case UNHEART_TRAIL + '_FULFILLED':
+             return Object.assign({}, state, { heartedTrails: action.payload })
+        case GET_STARRED_TRAILS + '_FULFILLED':
+             return Object.assign({}, state, { starredTrails: action.payload })
         default:
             return state;
     }

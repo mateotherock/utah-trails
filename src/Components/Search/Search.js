@@ -32,10 +32,12 @@ class Search extends Component {
 
         const trails = this.props.trailsToRender.map((trail) =>
             <TrailThumb key={trail.trail_id} 
+                        id={trail.trail_id}
                         image={trail.trail_img} 
                         name={trail.trail_name}
                         difficulty={trail.difficulty}
-                        area={trail.general_area} />
+                        area={trail.general_area} 
+                        history={this.props.history}/>      
         )
 
         return (
