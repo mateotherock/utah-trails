@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './TrailThumb.css';
 import heartNoFill from './../heart-nofill.png';
 import heartFill from './../heart-fill.png';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getHeartedTrails, heartTrail, unheartTrail, getStarredTrails, getOverallTrailRatings } from './../../ducks/reducer.js';
 import StarRating from './../StarRating/StarRating.js';
@@ -23,9 +22,9 @@ class TrailThumb extends Component {
         let heart = null;
         if (this.props.user.user_id) {
             if (this.props.heartedTrails.includes(this.props.name)) {
-                heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" />;
+                heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart filled" />;
             } else {
-                heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" /> 
+                heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart not filled" /> 
             }
         }
 

@@ -83,7 +83,7 @@ class Search extends Component {
                             <option value="4000">4000</option>
                             <option value="5000">5000</option>
                         </select>
-                        <button className="search_form_element" type="reset">Reset</button>
+                        <button className="search_form_element" type="reset" onClick={() => {this.setState({difficulty: '', area: '', length: 0, eGain: 0, rating: 0})}}>Reset</button>
                         <button className="search_form_element" type="submit">Filter Results</button>
                     </form>
                 </div>

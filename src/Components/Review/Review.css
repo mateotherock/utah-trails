@@ -1,0 +1,18 @@
+.individual_review_picture {
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+
+.individual_review_heading {
+    display: flex;
+    flex-direction: row;
+}
+
+.individual_review_name {
+
+}
+
+.individual_review_date_rating {
+
+}

@@ -72,10 +72,17 @@ passport.deserializeUser((id, done) => {
     })
 })
 
-app.get('/auth', passport.authenticate('auth0'));
+returnTo = (req, res, next) => {
+    req.session.returnTo = req.query.url;
+    next()
+}
+
+app.get('/auth', returnTo, passport.authenticate('auth0'));
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-    successRedirect: 'http://localhost:3000/#/'
+    // successRedirect: 'http://localhost:3000/#/'
+    failureRedirect: '/auth',
+    successReturnToOrRedirect: 'http://localhost:3000/#/'
 }));
 
 app.get('/auth/me', (req, res) => {
@@ -129,7 +136,7 @@ app.post('/api/trails', (req, res) => {
     let { difficulty, rating, area, length, eGain } = req.body;
     length = Number(length);
     eGain = Number(eGain);
-    difficulty = difficulty || "(Easy|Medium|Hard)";
+    difficulty = difficulty || "(Easy|Moderate|Hard)";
     area = area || "(Utah County|Grand County)";
     length === 0 ? length = 999 : length = length;
     eGain === 0 ? eGain = 99999 : eGain = eGain;
@@ -229,6 +236,14 @@ app.post('/api/heartedTrail',(req, res) => {
     const dbInstance = req.app.get('db');
     dbInstance.get_hearted_trail([trailName, userId])
     .then(boolean => {res.status(200).send(boolean);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/getReviews/:name', (req, res) => {
+    let { name } = req.params;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_reviews([name])
+    .then(reviews => {res.status(200).send(reviews);})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 

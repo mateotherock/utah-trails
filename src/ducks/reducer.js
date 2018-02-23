@@ -35,6 +35,7 @@ const GET_STARRED_TRAILS = 'GET_STARRED_TRAILS';
 const STAR_TRAIL = 'STAR_TRAIL';
 const GET_OVERALL_TRAIL_RATINGS = 'GET_OVERALL_TRAIL_RATINGS';
 const SUBMIT_REVIEW = 'SUBMIT_REVIEW'
+const GET_TRAIL_REVIEWS = 'GET_TRAIL_REVIEWS';
 
 export function getUser() {
     const user = axios.get('/auth/me').then(res => {
@@ -171,6 +172,16 @@ export function submitReview(obj) {
     }
 }
 
+export function getTrailReviews(name) {
+    const reviews = axios.get(`/api/getReviews/${name}`).then(resp => {
+        return resp.data
+    })
+    return {
+        type: GET_TRAIL_REVIEWS,
+        payload: reviews
+    }
+}
+
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_USER + '_FULFILLED':
@@ -208,6 +219,8 @@ export default function reducer(state = initialState, action) {
         case GET_OVERALL_TRAIL_RATINGS + '_FULFILLED':
              return Object.assign({}, state, { overallTrailRatings: action.payload})
         case SUBMIT_REVIEW + '_FULFILLED':
+             return Object.assign({}, state, { trailReviews: action.payload })
+        case GET_TRAIL_REVIEWS + '_FULFILLED':
              return Object.assign({}, state, { trailReviews: action.payload })
         default:
             return state;

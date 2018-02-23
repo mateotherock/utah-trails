@@ -1,3 +1,7 @@
+body {
+    padding-bottom: 50px;
+}
+
 .trail_container {
     display: flex;
     flex-direction: column;
@@ -6,24 +10,35 @@
 
 .trail_image {
     width: 70vw;
-    height: 45vh;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    height: 40vw;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
+}
+
+.heart_and_ratings {
+    width: 70vw;
+    display: flex;
+    justify-content: center;
+}
+
+.star_container {
+    width: 80%!important;
+    height: 10%!important;
 }
 
 .my_rating {
+    width: 40%;
+    display: flex;
     color: white;
     padding-top: 10px;
     padding-left: 10px;
 }
 
 .overall_rating {
+    width: 40%;
+    display: flex;
     color: white;
     padding-top: 10px;
-    padding-left: 10px;
 }
 
 .trail_deets {

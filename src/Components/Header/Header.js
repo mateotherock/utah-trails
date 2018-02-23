@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './../UtahTrails.png';
 import './Header.css';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getUser } from './../../ducks/reducer.js';
 
@@ -15,7 +15,7 @@ class Header extends Component {
         return (
             <header className="main_header">
                 <div className="main_header_left">
-                    <Link to='/'><img src={logo} alt="Utah Trails Logo"/></Link>
+                    <Link to='/'><img src={logo} alt="Utah Trails Logo" width='100%'/></Link>
                 </div>
                 <div className="main_header_right">
                     <Link to='/search'><button className="main_header_button">Search Trails</button></Link>
@@ -25,7 +25,7 @@ class Header extends Component {
                         <a href='http://localhost:3001/logout'><button className="main_header_button">Logout</button></a>
                     </div>
                     :
-                    <a href={ process.env.REACT_APP_LOGIN } ><button className="main_header_button">Login/Signup</button></a>}
+                    <a href={ process.env.REACT_APP_LOGIN + `?url=http://localhost:3000/#${this.props.location.pathname}` } ><button className="main_header_button">Login/Signup</button></a>}
                 </div>
             </header>
         )
@@ -38,4 +38,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getUser })(Header);
+export default withRouter(connect(mapStateToProps, { getUser })(Header));

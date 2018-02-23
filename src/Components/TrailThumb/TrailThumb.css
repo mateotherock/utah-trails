@@ -3,19 +3,28 @@
     width: 40vw;
     height: 30vh;
     cursor: pointer;
+    background-size: cover;
 }
 
 .thumb_name,
 .thumb_difficulty,
 .thumb_area,
-.thumb_heart,
-.star_container,
-.thumb_rating {
+.thumb_heart {
+    display: flex;
     color: #ffffff;
     padding-left: 10px;
 }
 
+.star_container {
+    padding: 10px;
+    width: 100%;
+    height: 10%;
+}
+
 .thumb_rating {
+    width: 40%;
+    padding-left: 10px;
+    color: white;
     display: flex;
     flex-direction: row;
 }

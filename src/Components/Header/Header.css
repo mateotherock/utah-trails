@@ -8,10 +8,12 @@
 }
 
 .main_header_left {
+    width: 35%;
     padding-left: 30px;
 }
 
 .main_header_right {
+    width: 35%;
     padding-right: 30px;
     display: flex;
     flex-direction: row;

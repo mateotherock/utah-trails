@@ -4,9 +4,10 @@ import Header from './../Header/Header.js';
 import heartNoFill from './../heart-nofill.png';
 import heartFill from './../heart-fill.png';
 import { connect } from 'react-redux';
-import { getTrail, getTrailTags, submitReview, heartTrail, unheartTrail } from './../../ducks/reducer.js';
+import { getTrail, getTrailTags, submitReview, heartTrail, unheartTrail, getTrailReviews } from './../../ducks/reducer.js';
 import './Trail.css';
 import StarRating from './../StarRating/StarRating.js';
+import Review from './../Review/Review.js';
 
 class Trail extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class Trail extends Component {
     componentDidMount() {
         this.props.getTrail(this.props.match.params.name)
         this.props.getTrailTags(this.props.match.params.name)
+        this.props.getTrailReviews(this.props.match.params.name)
     }
 
     componentWillReceiveProps(nextProps){
@@ -58,7 +60,6 @@ class Trail extends Component {
             this.setState ({
                 heartedTrail: resp.data[0].exists
             })
-            console.log(this.state.heartedTrail)
         });
     }
 
@@ -76,6 +77,11 @@ class Trail extends Component {
 
     render() {
 
+        const reviews = this.props.trailReviews.map((review, index) => {
+            let date = review.review_date.split('T')[0]
+            return <Review key={index} name={review.first_name + " " + review.last_name} picture={review.profile_picture} date={date} review={review.review_text} />
+        })
+
         const tags = this.props.trailTags.map((tag, index) => 
             <span key={index} className="tag">{tag}</span>
         )
@@ -83,9 +89,9 @@ class Trail extends Component {
         let heart = null;
         if (this.props.user.user_id) {
             if (this.state.heartedTrail) {
-                heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} className="thumb_heart" width="10%" height="15%" />;
+                heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} width="10%" height="15%" alt="heart filled" />;
             } else {
-                heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} className="thumb_heart" width="10%" height="15%" /> 
+                heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} width="10%" height="15%" alt="heart not filled" /> 
             }
         }
 
@@ -102,9 +108,11 @@ class Trail extends Component {
                     </div>
                     <div className="tag_group">{tags}</div>
                     <div style={{backgroundImage: "url(" + this.props.trailImage + ")"}} className="trail_image" alt="trail" >
-                        <div className="my_rating">My Rating: <StarRating typeof={"myRating"} rating={this.state.trailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
-                        {heart}
-                        <div className="overall_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={this.state.overallTrailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
+                        <div className="heart_and_ratings">
+                            {heart}
+                            <div className="my_rating">My Rating: <StarRating typeof={"myRating"} rating={this.state.trailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
+                            <div className="overall_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={this.state.overallTrailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
+                        </div>
                     </div>
                     <p className="trail_description">{this.props.trailDescription}</p>
                     <a href={`https://www.google.com/maps/dir/Current+Location/${this.props.trailheadLat},${this.props.trailheadLng}`} target="_blank" alt="Google Maps Link">Get directions to Trailhead</a>
@@ -118,9 +126,10 @@ class Trail extends Component {
                             </div>
                         </div>
                         <button type="submit">Submit</button>
-                        <button type="reset">Cancel</button>
+                        <button type="reset" onClick={() => {this.setState({review: ''})}}>Cancel</button>
                     </form>
                 </div>
+                {reviews}
             </div>
         )
     }
@@ -130,4 +139,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { getTrail, getTrailTags, submitReview, heartTrail, unheartTrail })(Trail);
+export default connect(mapStateToProps, { getTrail, getTrailTags, submitReview, heartTrail, unheartTrail, getTrailReviews })(Trail);
