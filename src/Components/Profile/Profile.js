@@ -34,17 +34,18 @@ class Profile extends Component {
                 <h1>{this.props.user.first_name} {this.props.user.last_name} </h1>
                 :
                 <div>
-                    <p>What is your name?</p>
-                    First Name:  <input type="text" value={this.state.firstName} onChange={(e) => this.setState({ firstName: e.target.value })} />
-                    Last Name: <input type="text" value={this.state.lastName} onChange={(e) => this.setState({ lastName: e.target.value })} />
-                    <button type='submit' onClick={() => {this.props.addName({firstName: this.state.firstName, lastName: this.state.lastName, id: this.props.user.user_id})}}>Add Name</button>
+                    <form>
+                        <p>What is your name?</p>
+                        First Name:  <input type="text" value={this.state.firstName} onChange={(e) => this.setState({ firstName: e.target.value })} />
+                        Last Name: <input type="text" value={this.state.lastName} onChange={(e) => this.setState({ lastName: e.target.value })} />
+                        <button type='submit' onClick={() => {this.props.addName({firstName: this.state.firstName, lastName: this.state.lastName, id: this.props.user.user_id})}}>Add Name</button>
+                    </form>
                 </div>
                 }
                 <div>
                     <img src={this.props.user.profile_picture} />
                     Joined: {dateJoined}
                 </div>
-                <div>This is the profile component</div>
             </div>
         )
     }

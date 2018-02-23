@@ -3,3 +3,13 @@
     justify-content: space-around;
     padding-top: 30px;
 }
+
+.search_form {
+    width: 70vw;
+    padding-top: 30px;
+}
+
+.search_form_element {
+    margin-left: 5px;
+    margin-right: 5px;
+}

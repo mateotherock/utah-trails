@@ -13,7 +13,8 @@ class Search extends Component {
             difficulty: '',
             area: '',
             length: 0,
-            eGain: 0
+            eGain: 0,
+            rating: 0
         }
 
         this.filterTrails = this.filterTrails.bind(this);
@@ -44,27 +45,27 @@ class Search extends Component {
             <div>
                 <Header />
                 <div>
-                    <form onSubmit={this.filterTrails}>
-                        Difficulty: <select name="difficulty" value={this.state.difficulty} onChange={(e) => this.setState({ difficulty: e.target.value })}>
+                    <form className="search_form" onSubmit={this.filterTrails}>
+                        Difficulty: <select className="search_form_element" name="difficulty" value={this.state.difficulty} onChange={(e) => this.setState({ difficulty: e.target.value })}>
                             <option value="Select" hidden default>Select</option>
                             <option value="Easy">Easy</option>
                             <option value="Moderate">Moderate</option>
                             <option value="Hard">Hard</option>
                         </select>
-                        {/* <select name="Minimum Average Rating">
-                            <option value="0 stars">0 Stars</option>
-                            <option value="1 star">1 Stars</option>
-                            <option value="2 stars">2 Stars</option>
-                            <option value="3 stars">3 Stars</option>
-                            <option value="4 stars">4 Stars</option>
-                            <option value="5 stars">5 Stars</option>
-                        </select> */}
-                        Area: <select name="area" value={this.state.area} onChange={(e) => this.setState({ area: e.target.value })}>
+                        Minimum Rating: <select className="search_form_element" name="Minimum Average Rating" value={this.state.rating} onChange={(e) => this.setState({ rating: e.target.value })}>
+                            <option value="0">0 Stars</option>
+                            <option value="1">1 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                        Area: <select className="search_form_element" name="area" value={this.state.area} onChange={(e) => this.setState({ area: e.target.value })}>
                             <option value="Select" hidden default>Select</option>
                             <option value="Utah County">Utah County</option>
                             <option value="Grand County">Grand County</option>
                         </select>
-                        Max Length in Miles: <select name="length" value={this.state.length} onChange={(e) => this.setState({ length: e.target.value })}>
+                        Max Length in Miles: <select className="search_form_element" name="length" value={this.state.length} onChange={(e) => this.setState({ length: e.target.value })}>
                             <option value="Select" hidden default>Select</option>  
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -72,7 +73,7 @@ class Search extends Component {
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
-                        Max Elevation Gain in Feet: <select name="eGain" value={this.state.eGain} onChange={(e) => this.setState({ eGain: e.target.value })}>
+                        Max Elevation Gain in Feet: <select className="search_form_element" name="eGain" value={this.state.eGain} onChange={(e) => this.setState({ eGain: e.target.value })}>
                             <option value="Select" hidden default>Select</option>
                             <option value="100">100</option>
                             <option value="500">500</option>
@@ -82,8 +83,8 @@ class Search extends Component {
                             <option value="4000">4000</option>
                             <option value="5000">5000</option>
                         </select>
-                        <button type="reset">Reset</button>
-                        <button type="submit">Filter Results</button>
+                        <button className="search_form_element" type="reset">Reset</button>
+                        <button className="search_form_element" type="submit">Filter Results</button>
                     </form>
                 </div>
                 <div className="thumb_grid">{trails}</div>

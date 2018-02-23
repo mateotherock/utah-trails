@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import './TrailThumb.css';
 import heartNoFill from './../heart-nofill.png';
 import heartFill from './../heart-fill.png';
-import starNoFill from './../star-nofill.png';
-import starFill from './../star-fill.png';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getHeartedTrails, heartTrail, unheartTrail, getStarredTrails } from './../../ducks/reducer.js';
+import { getHeartedTrails, heartTrail, unheartTrail, getStarredTrails, getOverallTrailRatings } from './../../ducks/reducer.js';
+import StarRating from './../StarRating/StarRating.js';
 
 class TrailThumb extends Component {
 
@@ -14,6 +13,7 @@ class TrailThumb extends Component {
         if (this.props.user.user_id) {
             this.props.getHeartedTrails(this.props.user.user_id)
             this.props.getStarredTrails(this.props.user.user_id)
+            this.props.getOverallTrailRatings()
         }
     }
     goToTrail(url){
@@ -29,68 +29,20 @@ class TrailThumb extends Component {
             }
         }
 
-        let star = null;
-        if (this.props.user.user_id) {
-            star = this.props.starredTrails.map((starredTrail => {
-                if (starredTrail.rating === 1 && starredTrail.trail_id === this.props.id) {
-                    return <div className="star_container">
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                            </div>
-                } else if (starredTrail.rating === 2 && starredTrail.trail_id === this.props.id) {
-                    return <div className="star_container">
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                            </div>
-                } else if (starredTrail.rating === 3 && starredTrail.trail_id === this.props.id) {
-                    return <div className="star_container">
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                            </div>
-                } else if (starredTrail.rating === 4 && starredTrail.trail_id === this.props.id) {
-                    return <div className="star_container">
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                            </div>
-                } else if (starredTrail.rating === 5 && starredTrail.trail_id === this.props.id) {
-                    return <div className="star_container">
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starFill} className="thumb_star" width="10%" height="15%"/>
-                            </div>
-                } else {
-                    return <div className="star_container">
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                                <img src={starNoFill} className="thumb_star" width="10%" height="15%"/>
-                            </div>
-                }
-            }))
-        }
+        let rating = this.props.starredTrails.find((trail) => trail.trail_id === this.props.id)
+        rating = rating ? rating.rating : 0
 
+        let overallRating = this.props.overallTrailRatings.find((trail) => trail.trail_id === this.props.id)
+        overallRating = overallRating ? Math.round(overallRating.avg) : 0
+    
         return (
             <div onClick={_=> this.goToTrail(`/trail/${this.props.name}`)} style={{textDecoration: 'none'}}><div style={{backgroundImage: "url(" + this.props.image + ")"}} className="thumb_container">
                 <h1 className="thumb_name">{this.props.name}</h1>
                 <h2 className="thumb_difficulty">{this.props.difficulty}</h2>
                 <h2 className="thumb_area">{this.props.area}</h2>
                 {heart}
-                {star}
+                <div className="thumb_rating">My Rating: <StarRating typeof={"myRating"} rating={rating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
+                <div className="thumb_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={overallRating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
             </div></div>
         )
     }  
@@ -100,4 +52,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { getHeartedTrails, heartTrail, unheartTrail, getStarredTrails })(TrailThumb);
+export default connect(mapStateToProps, { getHeartedTrails, heartTrail, unheartTrail, getStarredTrails, getOverallTrailRatings })(TrailThumb);

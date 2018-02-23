@@ -1,5 +1,3 @@
-
-
 .thumb_container {
     background-repeat: no-repeat;
     width: 40vw;
@@ -11,13 +9,25 @@
 .thumb_difficulty,
 .thumb_area,
 .thumb_heart,
-.star_container {
+.star_container,
+.thumb_rating {
     color: #ffffff;
     padding-left: 10px;
 }
 
+.thumb_rating {
+    display: flex;
+    flex-direction: row;
+}
+
 .thumb_name {
+    height: 10%;
     padding-top: 10px;
+}
+
+.thumb_difficulty,
+.thumb_area {
+    height: 8%;
 }
 
 .thumb_heart {

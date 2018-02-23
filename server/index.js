@@ -126,16 +126,15 @@ app.get('/api/trails', (req, res) => {
 })
 
 app.post('/api/trails', (req, res) => {
-    let { difficulty, area, length, eGain } = req.body;
+    let { difficulty, rating, area, length, eGain } = req.body;
     length = Number(length);
     eGain = Number(eGain);
     difficulty = difficulty || "(Easy|Medium|Hard)";
     area = area || "(Utah County|Grand County)";
     length === 0 ? length = 999 : length = length;
     eGain === 0 ? eGain = 99999 : eGain = eGain;
-    console.log(difficulty, area, length, eGain)
     const dbInstance = req.app.get('db');
-    dbInstance.filter_trails([difficulty, area, length, eGain])
+    dbInstance.filter_trails([difficulty, area, length, eGain, rating])
     .then(trails => {res.status(200).send(trails);})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
@@ -177,6 +176,59 @@ app.get('/api/starredTrails/:id', (req, res) => {
     const dbInstance = req.app.get('db');
     dbInstance.get_starred_trails([id])
     .then(ratings => {res.status(200).send(ratings)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/starTrail', (req, res) => {
+    let { user_id, trail_id, rating } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.star_trail([user_id, trail_id, rating])
+    .then(ratings => {res.status(200).send(ratings)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/trailRating', (req, res) => {
+    let { trailName, userId } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_trail_rating([trailName, userId])
+    .then((rating) => {
+        if (rating[0]) {
+            res.status(200).send(rating)
+        } else {
+            res.status(200).send([{rating:0}])
+        }})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/overallTrailRating/:name', (req, res) => {
+    let { name } = req.params;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_overall_trail_rating([name])
+    .then(rating => {res.status(200).send(rating);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/trailRatings', (req, res) => {
+    const dbInstance = req.app.get('db');
+    dbInstance.get_overall_star_trails()
+    .then(avgRatings => {res.status(200).send(avgRatings);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/submitReview', (req, res) => {
+    let { userId, trailId, reviewText } = req.body;
+    const date = new Date();
+    const dbInstance = req.app.get('db');
+    dbInstance.submit_review([trailId, userId, date, reviewText])
+    .then(reviews => {res.status(200).send(reviews);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/heartedTrail',(req, res) => {
+    let { trailName, userId } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_hearted_trail([trailName, userId])
+    .then(boolean => {res.status(200).send(boolean);})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 
