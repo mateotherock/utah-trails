@@ -43,7 +43,7 @@ class Profile extends Component {
                 </div>
                 }
                 <div>
-                    <img src={this.props.user.profile_picture} />
+                    <img src={this.props.user.profile_picture} alt="profile" />
                     Joined: {dateJoined}
                 </div>
             </div>

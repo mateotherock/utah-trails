@@ -32,9 +32,9 @@ class Trail extends Component {
     componentWillReceiveProps(nextProps){
         if (this.props.user.user_id) {
             this.getTrailRating({ trailName: this.props.match.params.name, userId: this.props.user.user_id});
-            this.getOverallTrailRating(this.props.match.params.name);
             this.getHeartedTrail({ trailName: this.props.match.params.name, userId: this.props.user.user_id })
         }
+        this.getOverallTrailRating(this.props.match.params.name);
     }
 
     getTrailRating(obj) {
@@ -79,7 +79,7 @@ class Trail extends Component {
 
         const reviews = this.props.trailReviews.map((review, index) => {
             let date = review.review_date.split('T')[0]
-            return <Review key={index} name={review.first_name + " " + review.last_name} picture={review.profile_picture} date={date} review={review.review_text} />
+            return <Review key={index} name={review.first_name + " " + review.last_name} picture={review.profile_picture} date={date} review={review.review_text} rating={review.rating} />
         })
 
         const tags = this.props.trailTags.map((tag, index) => 
@@ -87,12 +87,10 @@ class Trail extends Component {
         )
 
         let heart = null;
-        if (this.props.user.user_id) {
-            if (this.state.heartedTrail) {
-                heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} width="10%" height="15%" alt="heart filled" />;
-            } else {
-                heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} width="10%" height="15%" alt="heart not filled" /> 
-            }
+        if (this.state.heartedTrail) {
+            heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} width="10%" height="15%" alt="heart filled" />;
+        } else {
+            heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.trailId })}} width="10%" height="15%" alt="heart not filled" /> 
         }
 
         return (
@@ -108,15 +106,20 @@ class Trail extends Component {
                     </div>
                     <div className="tag_group">{tags}</div>
                     <div style={{backgroundImage: "url(" + this.props.trailImage + ")"}} className="trail_image" alt="trail" >
+                        {(this.props.user.user_id) ?
                         <div className="heart_and_ratings">
                             {heart}
                             <div className="my_rating">My Rating: <StarRating typeof={"myRating"} rating={this.state.trailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
                             <div className="overall_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={this.state.overallTrailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
                         </div>
+                        :
+                        <div className="overall_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={this.state.overallTrailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
+                        }
                     </div>
                     <p className="trail_description">{this.props.trailDescription}</p>
                     <a href={`https://www.google.com/maps/dir/Current+Location/${this.props.trailheadLat},${this.props.trailheadLng}`} target="_blank" alt="Google Maps Link">Get directions to Trailhead</a>
                 </div>
+                {(this.props.user.user_id) ?
                 <div className="review_container">
                     <h2>Write a Review</h2>
                     <form onSubmit={this.submitReview}>
@@ -129,6 +132,8 @@ class Trail extends Component {
                         <button type="reset" onClick={() => {this.setState({review: ''})}}>Cancel</button>
                     </form>
                 </div>
+                :
+                null}
                 {reviews}
             </div>
         )

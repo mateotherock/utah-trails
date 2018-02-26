@@ -39,6 +39,7 @@ body {
     display: flex;
     color: white;
     padding-top: 10px;
+    padding-left: 10px;
 }
 
 .trail_deets {

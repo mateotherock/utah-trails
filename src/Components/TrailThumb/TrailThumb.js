@@ -12,20 +12,18 @@ class TrailThumb extends Component {
         if (this.props.user.user_id) {
             this.props.getHeartedTrails(this.props.user.user_id)
             this.props.getStarredTrails(this.props.user.user_id)
-            this.props.getOverallTrailRatings()
         }
+        this.props.getOverallTrailRatings()
     }
     goToTrail(url){
         this.props.history.push(url);
     }
     render() {
         let heart = null;
-        if (this.props.user.user_id) {
-            if (this.props.heartedTrails.includes(this.props.name)) {
-                heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart filled" />;
-            } else {
-                heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart not filled" /> 
-            }
+        if (this.props.heartedTrails.includes(this.props.name)) {
+            heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart filled" />;
+        } else {
+            heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart not filled" /> 
         }
 
         let rating = this.props.starredTrails.find((trail) => trail.trail_id === this.props.id)
@@ -39,9 +37,15 @@ class TrailThumb extends Component {
                 <h1 className="thumb_name">{this.props.name}</h1>
                 <h2 className="thumb_difficulty">{this.props.difficulty}</h2>
                 <h2 className="thumb_area">{this.props.area}</h2>
-                {heart}
-                <div className="thumb_rating">My Rating: <StarRating typeof={"myRating"} rating={rating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
+                {(this.props.user.user_id) ?
+                <div>
+                    {heart}
+                    <div className="thumb_rating">My Rating: <StarRating typeof={"myRating"} rating={rating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
+                    <div className="thumb_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={overallRating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
+                </div>
+                :
                 <div className="thumb_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={overallRating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
+                }
             </div></div>
         )
     }  

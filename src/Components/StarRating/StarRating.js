@@ -8,7 +8,6 @@ class StarRating extends Component {
 
     render() {
         let star = null;
-        if (this.props.userId) {
             if (this.props.rating === 1) {
                 star = <div className="star_container">
                             <img src={starFill} className="thumb_star" width="20%" alt="star rating" />
@@ -66,7 +65,6 @@ class StarRating extends Component {
                             <img src={starNoFill} className="thumb_star" width="20%" alt="star rating" />
                         </div>
             }
-        }
         return (
             <div>
              {star}
