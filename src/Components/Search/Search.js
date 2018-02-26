@@ -64,6 +64,8 @@ class Search extends Component {
                             <option value="Select" hidden default>Select</option>
                             <option value="Utah County">Utah County</option>
                             <option value="Grand County">Grand County</option>
+                            <option value="Washington County">Washington County</option>
+                            <option value="Salt Lake County">Salt Lake County</option>
                         </select>
                         Max Length in Miles: <select className="search_form_element" name="length" value={this.state.length} onChange={(e) => this.setState({ length: e.target.value })}>
                             <option value="Select" hidden default>Select</option>  

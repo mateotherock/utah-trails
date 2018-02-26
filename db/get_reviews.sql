@@ -5,7 +5,7 @@ select review.review_date,
         users.profile_picture,
         rating.rating
 from review
-join trail on trail.trail_id = review.trail_id
 join users on users.user_id = review.user_id
-join rating on rating.trail_id = review.trail_id
+join trail on trail.trail_id = review.trail_id and review.user_id = users.user_id
+join rating on rating.trail_id = review.trail_id and rating.user_id = users.user_id
 where trail.trail_name = $1;
