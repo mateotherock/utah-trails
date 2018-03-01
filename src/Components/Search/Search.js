@@ -14,7 +14,7 @@ class Search extends Component {
             area: '',
             length: 0,
             eGain: 0,
-            rating: 0
+            rating: 'Select'
         }
 
         this.filterTrails = this.filterTrails.bind(this);
@@ -26,7 +26,9 @@ class Search extends Component {
 
     filterTrails(e) {
         e.preventDefault();
-        this.props.filterTrails(this.state);
+        let filterObj = Object.assign({}, this.state, {rating: this.state.rating === 'Select' ? 0 : this.state.rating})
+        console.log(filterObj)
+        this.props.filterTrails(filterObj);
     }
 
     render() {
@@ -52,7 +54,8 @@ class Search extends Component {
                             <option value="Moderate">Moderate</option>
                             <option value="Hard">Hard</option>
                         </select>
-                        Minimum Rating: <select className="search_form_element" name="Minimum Average Rating" value={this.state.rating} onChange={(e) => this.setState({ rating: e.target.value })}>
+                        Minimum Rating: <select className="search_form_element" name="rating" value={this.state.rating} onChange={(e) => this.setState({ rating: e.target.value })}>
+                            <option value="Select" hidden default>Select</option>
                             <option value="0">0 Stars</option>
                             <option value="1">1 Stars</option>
                             <option value="2">2 Stars</option>
@@ -60,14 +63,14 @@ class Search extends Component {
                             <option value="4">4 Stars</option>
                             <option value="5">5 Stars</option>
                         </select>
-                        Area: <select className="search_form_element" name="area" value={this.state.area} onChange={(e) => this.setState({ area: e.target.value })}>
+                        Location: <select className="search_form_element" name="area" value={this.state.area} onChange={(e) => this.setState({ area: e.target.value })}>
                             <option value="Select" hidden default>Select</option>
                             <option value="Utah County">Utah County</option>
                             <option value="Grand County">Grand County</option>
                             <option value="Washington County">Washington County</option>
                             <option value="Salt Lake County">Salt Lake County</option>
                         </select>
-                        Max Length in Miles: <select className="search_form_element" name="length" value={this.state.length} onChange={(e) => this.setState({ length: e.target.value })}>
+                        Max Length (Miles): <select className="search_form_element" name="length" value={this.state.length} onChange={(e) => this.setState({ length: e.target.value })}>
                             <option value="Select" hidden default>Select</option>  
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -75,7 +78,7 @@ class Search extends Component {
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
-                        Max Elevation Gain in Feet: <select className="search_form_element" name="eGain" value={this.state.eGain} onChange={(e) => this.setState({ eGain: e.target.value })}>
+                        Max Elevation Gain (Feet): <select className="search_form_element" name="eGain" value={this.state.eGain} onChange={(e) => this.setState({ eGain: e.target.value })}>
                             <option value="Select" hidden default>Select</option>
                             <option value="100">100</option>
                             <option value="500">500</option>

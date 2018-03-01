@@ -3,3 +3,45 @@
     justify-content: center;
     padding-top: 30px;
 }
+
+.featured_trail_image {
+    margin: auto;
+    margin-top: 20px;
+    width: 70vw;
+    height: 40vw;
+    border-radius: 5px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.star_container {
+    padding: 0 0 0 10px;
+}
+
+h2 {
+    padding-top: 20px;
+    padding-left: 20px;
+    color: white;
+    margin: 0;
+}
+
+.featured_overall_rating {
+    width: 40%;
+    display: flex;
+    color: white;
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+.new_reviews_users {
+    width: 40%;
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.home_bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

@@ -11,6 +11,7 @@ body {
 .trail_image {
     width: 70vw;
     height: 40vw;
+    border-radius: 5px;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -79,16 +80,33 @@ textarea {
     resize: vertical;
 }
 
-.review_container {
-    width: 70vw;
+.submit_review_container {
     margin: auto;
+    width: 70vw;
     margin-top: 10px;
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
 }
 
+.submit_review_container h2 {
+    color: black;
+}
+
+/* .review_container {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+} */
+
 .col_75 {
     width: 100%;
     margin-top: 6px;
+}
+
+.reviews_div {
+    width: 60vw;
+    margin: auto;
 }

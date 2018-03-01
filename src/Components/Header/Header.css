@@ -8,15 +8,17 @@
 }
 
 .main_header_left {
-    width: 35%;
+    width: 50%;
+    height: 50%;
     padding-left: 30px;
 }
 
 .main_header_right {
-    width: 35%;
+    width: 50%;
     padding-right: 30px;
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
 }
 
 .main_header_button {

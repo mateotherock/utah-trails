@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+// import './reset.css';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import Home from './Components/Home/Home.js';
 import Profile from './Components/Profile/Profile.js';

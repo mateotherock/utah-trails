@@ -7,13 +7,12 @@ const Review = (props) => (
             <div className="individual_review_heading">
                 <img src={props.picture} className="individual_review_picture" alt="profile" />
                 <div className="name_date_rating">
-                    <div className="individual_review_name">{props.name} said:</div>
+                    <div className="individual_review_name">{(props.trail) ? `On ${props.trail}, ${props.name} said...` : `${props.name} said...` }</div>
                     <div className="date_rating">
                         <div className="individual_review_date_rating">{props.date}</div>
                         <div className="individual_review_date_rating"><StarRating rating={props.rating} /></div>
                     </div>
                 </div>
-                {/* rating */}
             </div>
             <p>{props.review}</p>
         </div>

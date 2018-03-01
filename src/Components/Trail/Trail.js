@@ -100,8 +100,11 @@ class Trail extends Component {
                     <h1>{this.props.trailName}</h1>
                     <div className="trail_deets">
                         <p>Difficulty: {this.props.trailDifficulty}</p>
+                        <p>|</p>
                         <p>Area: {this.props.generalArea}</p>
+                        <p>|</p>
                         <p>Length: {this.props.trailLength} miles</p>
+                        <p>|</p>
                         <p>Elevation Gain: {this.props.elevationGain} feet</p>
                     </div>
                     <div className="tag_group">{tags}</div>
@@ -113,14 +116,14 @@ class Trail extends Component {
                             <div className="overall_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={this.state.overallTrailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
                         </div>
                         :
-                        <div className="overall_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={this.state.overallTrailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
+                        <div className="overall_rating" >Overall Rating: <StarRating typeof={"overallRating"} rating={this.state.overallTrailRating} userId={this.props.user.user_id} trailId={this.props.trailId} width={'10%'} height={'15%'} /></div>
                         }
                     </div>
                     <p className="trail_description">{this.props.trailDescription}</p>
                     <a href={`https://www.google.com/maps/dir/Current+Location/${this.props.trailheadLat},${this.props.trailheadLng}`} target="_blank" alt="Google Maps Link">Get directions to Trailhead</a>
                 </div>
                 {(this.props.user.user_id) ?
-                <div className="review_container">
+                <div className="submit_review_container">
                     <h2>Write a Review</h2>
                     <form onSubmit={this.submitReview}>
                         <div className="review_row">
@@ -134,7 +137,9 @@ class Trail extends Component {
                 </div>
                 :
                 null}
+                <div className="reviews_div">
                 {reviews}
+                </div>
             </div>
         )
     }

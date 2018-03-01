@@ -36,6 +36,8 @@ const STAR_TRAIL = 'STAR_TRAIL';
 const GET_OVERALL_TRAIL_RATINGS = 'GET_OVERALL_TRAIL_RATINGS';
 const SUBMIT_REVIEW = 'SUBMIT_REVIEW'
 const GET_TRAIL_REVIEWS = 'GET_TRAIL_REVIEWS';
+const ADD_DESC = 'ADD_DESC';
+
 
 export function getUser() {
     const user = axios.get('/auth/me').then(res => {
@@ -121,8 +123,7 @@ export function heartTrail(obj) {
 }
 
 export function unheartTrail(obj) {
-    console.log(obj)
-    const heartedTrails = axios.post('/api/unheartTrail', obj).then(resp => {
+    const heartedTrails = axios.delete(`/api/unheartTrail/${obj.user_id}/${obj.trail_id}`).then(resp => {
         let trailNames = resp.data.map(object => object.trail_name)
         return trailNames;
     })
@@ -182,11 +183,23 @@ export function getTrailReviews(name) {
     }
 }
 
+export function addDesc(obj) {
+    let user = axios.post('/api/addDesc', obj).then(resp => {
+        return resp.data[0]
+    })
+    return {
+        type: ADD_DESC,
+        payload: user
+    }
+}
+
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_USER + '_FULFILLED':
             return Object.assign({}, state, { user: action.payload })
         case ADD_NAME + '_FULFILLED':
+            return Object.assign({}, state, { user: action.payload })
+        case ADD_DESC + '_FULFILLED':
             return Object.assign({}, state, { user: action.payload })
         case GET_TRAIL + '_FULFILLED':
             return Object.assign({}, state, {   trailId: action.payload.trail_id,

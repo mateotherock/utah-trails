@@ -21,9 +21,9 @@ class TrailThumb extends Component {
     render() {
         let heart = null;
         if (this.props.heartedTrails.includes(this.props.name)) {
-            heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart filled" />;
+            heart = <img src={heartFill} onClick={(e) => { e.stopPropagation(); this.props.unheartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="10%" alt="heart filled" />;
         } else {
-            heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="15%" alt="heart not filled" /> 
+            heart = <img src={heartNoFill} onClick={(e) => { e.stopPropagation(); this.props.heartTrail({ user_id: this.props.user.user_id, trail_id: this.props.id })}} className="thumb_heart" width="10%" height="10%" alt="heart not filled" /> 
         }
 
         let rating = this.props.starredTrails.find((trail) => trail.trail_id === this.props.id)
@@ -44,7 +44,7 @@ class TrailThumb extends Component {
                     <div className="thumb_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={overallRating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
                 </div>
                 :
-                <div className="thumb_rating">Overall Rating: <StarRating typeof={"overallRating"} rating={overallRating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
+                <div className="thumb_rating" style={{paddingTop: 30}} >Overall Rating: <StarRating typeof={"overallRating"} rating={overallRating} userId={this.props.user.user_id} trailId={this.props.id} width={'5%'} height={'10%'} /></div>
                 }
             </div></div>
         )

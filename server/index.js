@@ -17,6 +17,9 @@ const {
 } = process.env;
 
 const app = express();
+
+app.use( express.static( `${__dirname}/../build` ) );
+
 app.use(bodyParser.json());
 
 app.use(session({
@@ -81,7 +84,7 @@ app.get('/auth', returnTo, passport.authenticate('auth0'));
 app.get('/auth/callback', passport.authenticate('auth0', {
     // successRedirect: 'http://localhost:3000/#/'
     failureRedirect: '/auth',
-    successReturnToOrRedirect: 'http://localhost:3000/#/'
+    successReturnToOrRedirect: process.env.REACT_APP_FRONTEND
 }));
 
 app.get('/auth/me', (req, res) => {
@@ -94,7 +97,7 @@ app.get('/auth/me', (req, res) => {
 
 app.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('http://localhost:3000/#/');
+    res.redirect(process.env.REACT_APP_FRONTEND);
 })
 
 app.get('/api/markers', (req, res) => {
@@ -136,7 +139,7 @@ app.post('/api/trails', (req, res) => {
     length = Number(length);
     eGain = Number(eGain);
     difficulty = difficulty || "(Easy|Moderate|Hard)";
-    area = area || "(Utah County|Grand County|Washington County)";
+    area = area || "(Utah County|Grand County|Washington County|San Juan County|Salt Lake County)";
     length === 0 ? length = 999 : length = length;
     eGain === 0 ? eGain = 99999 : eGain = eGain;
     const dbInstance = req.app.get('db');
@@ -162,6 +165,7 @@ app.get('/api/heartedTrails/:id', (req, res) => {
 })
 
 app.post('/api/heartTrail', (req, res) => {
+    console.log(req.body)
     let { user_id, trail_id } = req.body;
     const dbInstance = req.app.get('db');
     dbInstance.heart_trail([user_id, trail_id])
@@ -169,10 +173,10 @@ app.post('/api/heartTrail', (req, res) => {
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 
-app.post('/api/unheartTrail', (req, res) => {
-    let { user_id, trail_id } = req.body;
+app.delete('/api/unheartTrail/:user/:trail', (req, res) => {
+    let { user, trail } = req.params;
     const dbInstance = req.app.get('db');
-    dbInstance.unheart_trail([user_id, trail_id])
+    dbInstance.unheart_trail([user, trail])
     .then(trailIds => {res.status(200).send(trailIds)})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
@@ -243,6 +247,35 @@ app.get('/api/getReviews/:name', (req, res) => {
     const dbInstance = req.app.get('db');
     dbInstance.get_reviews([name])
     .then(reviews => {res.status(200).send(reviews);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/featuredTrail', (req, res) => {
+    const dbInstance = req.app.get('db');
+    dbInstance.get_featured_trail()
+    .then(featuredTrail => {res.status(200).send(featuredTrail);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/newReviews', (req, res) => {
+    const dbInstance = req.app.get('db');
+    dbInstance.get_new_reviews()
+    .then(newReviews => {res.status(200).send(newReviews);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.get('/api/newUsers', (req, res) => {
+    const dbInstance = req.app.get('db');
+    dbInstance.get_new_users()
+    .then(newUsers => {res.status(200).send(newUsers);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/addDesc', (req, res) => {
+    let { id, desc } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.add_description([id, desc])
+    .then(updatedUser => {res.status(200).send(updatedUser)})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 
