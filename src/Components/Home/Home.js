@@ -6,6 +6,7 @@ import './Home.css';
 import StarRating from './../StarRating/StarRating.js';
 import Review from './../Review/Review.js';
 import User from './../User/User.js';
+import HomeImage from './../HomeImage/HomeImage.js';
 
 export default class Home extends Component {
     constructor(props) {
@@ -50,6 +51,9 @@ export default class Home extends Component {
                 <header>
                     <Header />
                 </header>
+
+                <HomeImage />
+
                 {(this.state.featuredTrail.trail_img)
                 ?
                 <div onClick={_=> this.goToTrail(`/trail/${this.state.featuredTrail.trail_name}`)} style={{backgroundImage: "url(" + this.state.featuredTrail.trail_img + ")"}} className="featured_trail_image" alt="trail" >
