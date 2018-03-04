@@ -87,6 +87,9 @@ class Search extends Component {
                             <option value="Washington County">Washington County</option>
                             <option value="Salt Lake County">Salt Lake County</option>
                             <option value="Juab County">Juab County</option>
+                            <option value="Wasatch County">Wasatch County</option>
+                            <option value="San Juan County">San Juan County</option>
+                            <option value="Garfield County">Garfield County</option>
                         </select>
                         Max Length (Miles): <select className="search_form_element" name="length" value={this.state.length} onChange={(e) => this.setState({ length: e.target.value })}>
                             <option value="Select" hidden default>Select</option>  

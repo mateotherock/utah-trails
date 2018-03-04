@@ -147,7 +147,7 @@ app.post('/api/trails', (req, res) => {
     length = Number(length);
     eGain = Number(eGain);
     difficulty = difficulty || "(Easy|Moderate|Hard)";
-    area = area || "(Utah County|Grand County|Washington County|San Juan County|Salt Lake County|Juab County)";
+    area = area || "(Utah County|Grand County|Washington County|San Juan County|Salt Lake County|Juab County|Wasatch County|Garfield County)";
     length === 0 ? length = 999 : length = length;
     eGain === 0 ? eGain = 99999 : eGain = eGain;
     const dbInstance = req.app.get('db');
