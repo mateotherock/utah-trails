@@ -134,12 +134,20 @@ app.get('/api/trails', (req, res) => {
     .catch(err => {res.status(500).send(err);})
 })
 
+app.get('/api/getIndividualHeartedTrails/:id', (req, res) => {
+    let { id } = req.params;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_individual_trails([id])
+    .then(trails => {res.status(200).send(trails);})
+    .catch(err => {res.status(500).send(err);})
+})
+
 app.post('/api/trails', (req, res) => {
     let { difficulty, rating, area, length, eGain } = req.body;
     length = Number(length);
     eGain = Number(eGain);
     difficulty = difficulty || "(Easy|Moderate|Hard)";
-    area = area || "(Utah County|Grand County|Washington County|San Juan County|Salt Lake County)";
+    area = area || "(Utah County|Grand County|Washington County|San Juan County|Salt Lake County|Juab County)";
     length === 0 ? length = 999 : length = length;
     eGain === 0 ? eGain = 99999 : eGain = eGain;
     const dbInstance = req.app.get('db');
@@ -264,6 +272,14 @@ app.get('/api/newReviews', (req, res) => {
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 
+app.get('/api/individualReviews/:id', (req, res) => {
+    let { id } = req.params;
+    const dbInstance = req.app.get('db');
+    dbInstance.get_individual_reviews([id])
+    .then(individualReviews => {res.status(200).send(individualReviews);})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
 app.get('/api/newUsers', (req, res) => {
     const dbInstance = req.app.get('db');
     dbInstance.get_new_users()
@@ -276,6 +292,22 @@ app.post('/api/addDesc', (req, res) => {
     const dbInstance = req.app.get('db');
     dbInstance.add_description([id, desc])
     .then(updatedUser => {res.status(200).send(updatedUser)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/addPicUrl', (req, res) => {
+    let { id, url } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.add_pic_url([id, url])
+    .then(updatedUser => {res.status(200).send(updatedUser)})
+    .catch(err => {console.log(err); res.status(500).send(err);})
+})
+
+app.post('/api/filterTrails', (req, res) => {
+    let { tags } = req.body;
+    const dbInstance = req.app.get('db');
+    dbInstance.filter_trails_by_tags([tags])
+    .then(trails => {res.status(200).send(trails);})
     .catch(err => {console.log(err); res.status(500).send(err);})
 })
 

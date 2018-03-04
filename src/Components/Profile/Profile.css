@@ -34,6 +34,10 @@
     border: 5px solid #60b0f4;
 }
 
+.profile_new_url {
+    clear: both;
+}
+
 .edit_name_form {
     padding: 20px 0 20px 0;
     width: 50%;
@@ -56,4 +60,17 @@
     border-radius: 5px;
     height: 50%;
     width: 75%;
+}
+
+.profile_bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.new_reviews_users {
+    width: 40%;
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-around;
 }

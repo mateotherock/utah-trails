@@ -15,6 +15,7 @@ let initialState = {
     trailheadLat: 0,
     trailheadLng: 0,
     trailsToRender: [],
+    individualTrailsToRender: [],
     trailTags: [],
     heartedTrails: [],
     starredTrails: [],
@@ -37,7 +38,9 @@ const GET_OVERALL_TRAIL_RATINGS = 'GET_OVERALL_TRAIL_RATINGS';
 const SUBMIT_REVIEW = 'SUBMIT_REVIEW'
 const GET_TRAIL_REVIEWS = 'GET_TRAIL_REVIEWS';
 const ADD_DESC = 'ADD_DESC';
-
+const ADD_PIC_URL = 'ADD_PIC_URL';
+const FILTER_TRAILS_BY_TAG = 'FILTER_TRAILS_BY_TAG';
+const GET_INDIVIDUAL_HEARTED_TRAILS = 'GET_INDIVIDUAL_HEARTED_TRAILS'
 
 export function getUser() {
     const user = axios.get('/auth/me').then(res => {
@@ -193,6 +196,36 @@ export function addDesc(obj) {
     }
 }
 
+export function addPicUrl(obj) {
+    let user = axios.post('/api/addPicUrl', obj).then(resp => {
+        return resp.data[0]
+    })
+    return {
+        type: ADD_PIC_URL,
+        payload: user
+    }
+}
+
+export function filterTrailsByTag(tagArray) {
+    let trails = axios.post('/api/filterTrails', {tags: tagArray}).then(resp => {
+        return resp.data
+    })
+    return {
+        type: FILTER_TRAILS_BY_TAG,
+        payload: trails
+    }
+}
+
+export function getIndividualHeartedTrails(id) {
+    const trails = axios.get(`/api/getIndividualHeartedTrails/${id}`).then(resp => {
+        return resp.data;
+    });
+    return {
+        type: GET_INDIVIDUAL_HEARTED_TRAILS,
+        payload: trails
+    }
+}
+
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case GET_USER + '_FULFILLED':
@@ -200,6 +233,8 @@ export default function reducer(state = initialState, action) {
         case ADD_NAME + '_FULFILLED':
             return Object.assign({}, state, { user: action.payload })
         case ADD_DESC + '_FULFILLED':
+            return Object.assign({}, state, { user: action.payload })
+        case ADD_PIC_URL + '_FULFILLED':
             return Object.assign({}, state, { user: action.payload })
         case GET_TRAIL + '_FULFILLED':
             return Object.assign({}, state, {   trailId: action.payload.trail_id,
@@ -215,8 +250,17 @@ export default function reducer(state = initialState, action) {
              })
         case GET_TRAILS + '_FULFILLED':
              return Object.assign({}, state, { trailsToRender: action.payload })
+        case GET_INDIVIDUAL_HEARTED_TRAILS + '_FULFILLED':
+             return Object.assign({}, state, { individualTrailsToRender: action.payload })
         case FILTER_TRAILS + '_FULFILLED':
-             return Object.assign({}, state, { trailsToRender: action.payload })
+             var secondFilter = state.trailsToRender.filter((trail) => {
+                for (let i = 0; i < action.payload.length; i++) {
+                    if (trail.trail_id === action.payload[i].trail_id) {
+                        return true;
+                    }
+                }
+             })
+             return Object.assign({}, state, { trailsToRender: secondFilter })
         case GET_TRAIL_TAGS + '_FULFILLED':
              return Object.assign({}, state, { trailTags: action.payload })
         case GET_HEARTED_TRAILS + '_FULFILLED':
@@ -235,6 +279,15 @@ export default function reducer(state = initialState, action) {
              return Object.assign({}, state, { trailReviews: action.payload })
         case GET_TRAIL_REVIEWS + '_FULFILLED':
              return Object.assign({}, state, { trailReviews: action.payload })
+        case FILTER_TRAILS_BY_TAG + '_FULFILLED':
+             var secondFilter = state.trailsToRender.filter((trail) => {
+                for (let i = 0; i < action.payload.length; i++) {
+                   if (trail.trail_id === action.payload[i].trail_id) {
+                       return true;
+                   }
+                }
+             })
+             return Object.assign({}, state, { trailsToRender: secondFilter })
         default:
             return state;
     }

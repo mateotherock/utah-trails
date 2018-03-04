@@ -1,6 +1,6 @@
 .moveable_scene {
     width: 70vw;
-    height: 70vw;
+    height: 40vw;
     margin: 20px auto 0 auto;
     text-align: center;
 }
@@ -8,7 +8,7 @@
 .moveable_scene_button {
     position: relative;
     z-index: 100;
-    margin-top: 100px;
+    margin-top: 25%;
     border-radius: 5px;
     width: 150px;
     height: 60px;
@@ -17,6 +17,7 @@
     color: #f2f2f2;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: bold;
 }
 
 

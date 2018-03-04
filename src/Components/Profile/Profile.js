@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Header from './../Header/Header.js';
+import Review from './../Review/Review.js';
+import TrailThumb from './../TrailThumb/TrailThumb.js';
 import { connect } from 'react-redux';
-import { getUser, addName, addDesc } from './../../ducks/reducer.js';
+import { Link } from 'react-router-dom';
+import { getUser, addName, addDesc, addPicUrl, getIndividualHeartedTrails } from './../../ducks/reducer.js';
 import './Profile.css';
 
 class Profile extends Component {
@@ -13,19 +16,26 @@ class Profile extends Component {
             firstName: '',
             lastName: '',
             desc: '',
+            picUrl: '',
             editName: false,
-            editDesc: false
+            editDesc: false,
+            editPic: false,
+            individualReviews: []
         }
     }
 
     componentWillMount() {
         this.props.getUser()
+        axios.get(`/api/individualReviews/${this.props.user.user_id}`).then(resp => {
+            this.setState({ individualReviews: resp.data })
+        })
     }
 
     componentDidMount() {
         // if (!this.props.user.user_id) {
         //     this.props.history.push('/')
         // }
+        this.props.getIndividualHeartedTrails(this.props.user.user_id)
     }
     
     render() {
@@ -33,6 +43,21 @@ class Profile extends Component {
         if(this.props.user.date_joined) {
             var dateJoined = this.props.user.date_joined.split('T')[0];
         }
+
+        const reviews = this.state.individualReviews.map((review, index) => {
+            let date = review.review_date.split('T')[0]
+            return <Link to={`/trail/${review.trail_name}`} style={{textDecoration: 'none', color: 'black'}} ><Review key={index} trail={review.trail_name} name={'you'} picture={review.profile_picture} date={date} review={review.review_text} rating={review.rating} /></Link>
+        })
+
+        const trails = this.props.individualTrailsToRender.map((trail) =>
+            <TrailThumb key={trail.trail_id} 
+                        id={trail.trail_id}
+                        image={trail.trail_img} 
+                        name={trail.trail_name}
+                        difficulty={trail.difficulty}
+                        area={trail.general_area} 
+                        history={this.props.history}/>      
+        )
 
         return (
             <div>
@@ -62,7 +87,16 @@ class Profile extends Component {
                             Joined: {dateJoined}
                         </div>
                         <div className="profile_card_image">
-                            <img src={this.props.user.profile_picture} className="profile_image" alt="profile" />
+                            <img onClick={() => this.setState({editPic: true})} src={this.props.user.profile_picture} className="profile_image" alt="profile" />
+                            {(!this.state.editPic) 
+                            ?
+                            null
+                            :
+                            <form className="profile_new_url">
+                                URL of new picture: <input type="text" value={this.state.picUrl} onChange={(e) => this.setState({ picUrl: e.target.value })} />
+                                <button onClick={() => {this.props.addPicUrl({ url: this.state.picUrl, id: this.props.user.user_id}); this.setState({ editPic: false })}}type='submit'>Update</button>
+                            </form>
+                            }
                         </div>
                     </div>
                     <div className="profile_card_bottom">
@@ -84,6 +118,21 @@ class Profile extends Component {
                         }
                     </div>
                 </div>
+                <div className="profile_bottom">
+                    <div className="new_reviews_users">
+                        <div>
+                            <h3>Your Reviews:</h3>
+                            <h3></h3>
+                            {reviews}
+                        </div>
+                    </div>
+                    <div className="new_reviews_users">
+                        <div>
+                            <h3>Your Hearted Trails:</h3>
+                            {trails}
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -93,4 +142,4 @@ function mapStateToProps(state) {
     return state;
 }
 
-export default connect(mapStateToProps, { getUser, addName, addDesc })(Profile);
+export default connect(mapStateToProps, { getUser, addName, addDesc, addPicUrl, getIndividualHeartedTrails })(Profile);
