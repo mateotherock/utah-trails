@@ -26,16 +26,18 @@ class Profile extends Component {
 
     componentWillMount() {
         this.props.getUser()
-        axios.get(`/api/individualReviews/${this.props.user.user_id}`).then(resp => {
-            this.setState({ individualReviews: resp.data })
-        })
     }
 
     componentDidMount() {
         // if (!this.props.user.user_id) {
         //     this.props.history.push('/')
         // }
-        this.props.getIndividualHeartedTrails(this.props.user.user_id)
+        if (this.props.user.user_id) {
+            this.props.getIndividualHeartedTrails(this.props.user.user_id);
+            axios.get(`/api/individualReviews/${this.props.user.user_id}`).then(resp => {
+                this.setState({ individualReviews: resp.data })
+            })
+        }
     }
     
     render() {
