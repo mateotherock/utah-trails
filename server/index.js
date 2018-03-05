@@ -173,7 +173,6 @@ app.get('/api/heartedTrails/:id', (req, res) => {
 })
 
 app.post('/api/heartTrail', (req, res) => {
-    console.log(req.body)
     let { user_id, trail_id } = req.body;
     const dbInstance = req.app.get('db');
     dbInstance.heart_trail([user_id, trail_id])
